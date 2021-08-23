@@ -12,7 +12,7 @@ fn main() -> Result<(), Box<(dyn Error + Send + Sync + 'static)>> {
 
     let event_loop = EventLoop::new();
 
-    let window = unsafe {
+    let context = unsafe {
         let wb = WindowBuilder::new().with_title("Scancode Example");
 
         ContextBuilder::new()
@@ -21,13 +21,10 @@ fn main() -> Result<(), Box<(dyn Error + Send + Sync + 'static)>> {
             .map_err(|e| e.1)?
     };
 
-    let window_id = window.window().id();
+    let main_window_id = context.window().id();
 
     event_loop.run(move |event, _window_target, control_flow| match event {
-        Event::WindowEvent {
-            event,
-            window_id: id,
-        } if window_id == id => match event {
+        Event::WindowEvent { event, window_id } if window_id == main_window_id => match event {
             WindowEvent::KeyboardInput { input, .. } => {
                 let KeyboardInput {
                     scancode,
@@ -58,8 +55,8 @@ fn main() -> Result<(), Box<(dyn Error + Send + Sync + 'static)>> {
             WindowEvent::CloseRequested => *control_flow = ControlFlow::Exit,
             _ => (),
         },
-        Event::RedrawRequested(id) if window_id == id => {
-            match window.swap_buffers() {
+        Event::RedrawRequested(window_id) if window_id == main_window_id => {
+            match context.swap_buffers() {
                 Ok(_) => (),
                 Err(e) => {
                     eprintln!("An error occurred while swapping buffers: {}", e);
