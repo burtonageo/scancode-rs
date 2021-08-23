@@ -11,8 +11,9 @@ repository = "https://github.com/burtonageo/scancode-rs"
 license = "MIT OR Apache-2.0"
 edition = "2018"
 
-[dependencies]
-enum-primitive-derive = "0.2"
+[dependencies.enum-primitive-derive]
+version = "0.2"
+optional = true
 
 [dependencies.num-traits]
 version = "0.2"
@@ -25,5 +26,5 @@ num = "0.1"
 
 [features]
 default = ["std", "num-from-primitive"]
-num-from-primitive = ["num-traits"]
+num-from-primitive = ["num-traits", "enum-primitive-derive"]
 std = []
