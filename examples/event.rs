@@ -1,35 +1,51 @@
-extern crate glutin;
-extern crate scancode;
-
+use glutin::{
+    event::{ElementState, Event, KeyboardInput, WindowEvent},
+    event_loop::{ControlFlow, EventLoop},
+    window::WindowBuilder,
+    ContextBuilder,
+};
 use scancode::Scancode;
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, error::Error, mem};
 
-fn main() {
+fn main() -> Result<(), Box<(dyn Error + Send + Sync + 'static)>> {
     let mut errors = BTreeMap::new();
-    let events_loop = glutin::EventsLoop::new();
-    let window = glutin::WindowBuilder::new().build(&events_loop).unwrap();
-    let _ = unsafe { window.make_current() };
-    // println!("Pixel format of the window: {:?}", window.get_pixel_format());
-    // let context = support::load(&window);
 
-    events_loop.run_forever(|event| {
-        let _ = window.swap_buffers();
+    let event_loop = EventLoop::new();
 
-        let glutin::Event::WindowEvent { event, .. } = event;
+    let window = unsafe {
+        let wb = WindowBuilder::new().with_title("Scancode Example");
 
-        match event {
-            glutin::WindowEvent::KeyboardInput(state, scancode, vk, _) => {
-                if state == glutin::ElementState::Pressed {
+        ContextBuilder::new()
+            .build_windowed(wb, &event_loop)?
+            .make_current()
+            .map_err(|e| e.1)?
+    };
+
+    let window_id = window.window().id();
+
+    event_loop.run(move |event, _window_target, control_flow| match event {
+        Event::WindowEvent {
+            event,
+            window_id: id,
+        } if window_id == id => match event {
+            WindowEvent::KeyboardInput { input, .. } => {
+                let KeyboardInput {
+                    scancode,
+                    state,
+                    virtual_keycode: vk,
+                    ..
+                } = input;
+
+                if state == ElementState::Pressed {
                     print!("pressed")
                 } else {
                     print!("released")
                 }
 
-                print!(" {} -> ", scancode);
                 if let Some(code) = Scancode::new(scancode) {
-                    print!("{:?}", code);
+                    print!(" {} -> {:?}", scancode, code);
                 } else {
-                    print!("*** ERROR: UNKNOWN SCANCODE ***");
+                    eprintln!("*** ERROR: UNKNOWN SCANCODE ***");
                     errors.insert(scancode, format!("{:?}", vk));
                 }
 
@@ -39,15 +55,28 @@ fn main() {
                     println!(" (virtual keycode UNKNOWN)");
                 }
             }
-            glutin::WindowEvent::Closed => events_loop.interrupt(),
+            WindowEvent::CloseRequested => *control_flow = ControlFlow::Exit,
             _ => (),
-        }
-    });
+        },
+        Event::RedrawRequested(id) if window_id == id => {
+            match window.swap_buffers() {
+                Ok(_) => (),
+                Err(e) => {
+                    eprintln!("An error occurred while swapping buffers: {}", e);
+                    *control_flow = ControlFlow::Exit;
+                    return;
+                }
+            }
 
-    if !errors.is_empty() {
-        println!("Unhandled scancodes:");
-        for (k, v) in errors.iter() {
-            println!("{}: {}", k, v);
+            let frame_errors = mem::take(&mut errors);
+            if !frame_errors.is_empty() {
+                println!("Unhandled scancodes:");
+
+                for (k, v) in frame_errors.into_iter() {
+                    println!("{}: {}", k, v);
+                }
+            }
         }
-    }
+        _ => (),
+    })
 }

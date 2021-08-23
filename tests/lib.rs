@@ -1,7 +1,4 @@
-extern crate num;
-extern crate scancode;
-
-use num::FromPrimitive;
+use num_traits::FromPrimitive;
 use scancode::Scancode;
 
 #[test]
