@@ -39,6 +39,7 @@ pub enum Scancode {
     X = 27,
     Y = 28,
     Z = 29,
+
     Num1 = 30,
     Num2 = 31,
     Num3 = 32,
@@ -49,8 +50,10 @@ pub enum Scancode {
     Num8 = 37,
     Num9 = 38,
     Num0 = 39,
+
     Enter = 40,
     Escape = 41,
+
     Backspace = 42,
     Tab = 43,
     Space = 44,
@@ -67,6 +70,7 @@ pub enum Scancode {
     Period = 55,
     Slash = 56,
     CapsLock = 57,
+
     F1 = 58,
     F2 = 59,
     F3 = 60,
@@ -79,6 +83,7 @@ pub enum Scancode {
     F10 = 67,
     F11 = 68,
     F12 = 69,
+
     PrintScreen = 70,
     ScrollLock = 71,
     Pause = 72,
@@ -88,16 +93,19 @@ pub enum Scancode {
     Delete = 76,
     End = 77,
     PageDown = 78,
+
     Right = 79,
     Left = 80,
     Down = 81,
     Up = 82,
+
     NumLock = 83,
     PadDivide = 84,
     PadMultiply = 85,
     PadMinus = 86,
     PadPlus = 87,
     PadEnter = 88,
+
     Pad1 = 89,
     Pad2 = 90,
     Pad3 = 91,
@@ -109,17 +117,22 @@ pub enum Scancode {
     Pad9 = 97,
     Pad0 = 98,
     PadDecimal = 99,
+
     NonUsBackslash = 100,
     PadEquals = 103,
     Menu = 118,
+
     Mute = 127,
     VolumeUp = 128,
     VolumeDown = 129,
+
     SysReq = 154,
+
     LeftControl = 224,
     LeftShift = 225,
     LeftAlt = 226,
     LeftGui = 227,
+
     RightControl = 228,
     RightShift = 229,
     RightAlt = 230,
@@ -145,9 +158,10 @@ mod scancode {
 impl Scancode {
     /// Try to convert a hardware scancode from the current platform to a Scancode enum value.
     #[inline]
-    pub const fn new(hardware_scancode: u8) -> Option<Scancode> {
-        if (hardware_scancode as usize) < scancode::MAP.len() {
-            scancode::MAP[hardware_scancode as usize]
+    pub const fn new(hardware_scancode: u32) -> Option<Scancode> {
+        let hardware_scancode = hardware_scancode as usize;
+        if hardware_scancode < scancode::MAP.len() {
+            scancode::MAP[hardware_scancode]
         } else {
             None
         }
