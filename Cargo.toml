@@ -12,8 +12,18 @@ license = "MIT OR Apache-2.0"
 edition = "2018"
 
 [dependencies]
-enum_primitive = "0.1"
+enum-primitive-derive = "0.2"
+
+[dependencies.num-traits]
+version = "0.2"
+default-features = false
+optional = true
 
 [dev-dependencies]
 glutin = "0.8"
 num = "0.1"
+
+[features]
+default = ["std", "num-from-primitive"]
+num-from-primitive = ["num-traits"]
+std = []
