@@ -139,20 +139,24 @@ pub enum Scancode {
     RightGui = 231,
 }
 
-#[cfg(target_os = "linux")]
+#[cfg(all(unix, not(apple)))]
 mod scancode_linux;
 #[cfg(target_os = "macos")]
 mod scancode_macos;
-#[cfg(target_os = "windows")]
+#[cfg(windows)]
 mod scancode_windows;
 
 mod scancode {
-    #[cfg(target_os = "linux")]
+    #[cfg(all(unix, not(apple)))]
     pub use crate::scancode_linux::MAP;
     #[cfg(target_os = "macos")]
     pub use crate::scancode_macos::MAP;
-    #[cfg(target_os = "windows")]
+    #[cfg(windows)]
     pub use crate::scancode_windows::MAP;
+
+    // Fallback empty scancode map.
+    #[cfg(not(any(unix, windows)))]
+    pub const MAP: [Option<crate::Scancode>; 0] = [];
 }
 
 impl Scancode {
