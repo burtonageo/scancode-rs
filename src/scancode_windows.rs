@@ -1,8 +1,7 @@
-use Scancode;
-use Scancode::*;
+use crate::Scancode::{self, *};
 
 /// Keyboard scancode map for Microsoft Windows.
-pub static MAP: [Option<Scancode>; 94] = [
+pub const MAP: [Option<Scancode>; 94] = [
     None,
     Some(Escape),
     Some(Num1),

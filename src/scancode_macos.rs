@@ -1,8 +1,7 @@
-use Scancode;
-use Scancode::*;
+use crate::Scancode::{self, *};
 
 /// Keyboard scancode map for OS X.
-pub static MAP: [Option<Scancode>; 127] = [
+pub const MAP: [Option<Scancode>; 127] = [
     Some(A),
     Some(S),
     Some(D),

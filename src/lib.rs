@@ -133,16 +133,17 @@ mod scancode_windows;
 
 mod scancode {
     #[cfg(target_os = "linux")]
-    pub use scancode_linux::MAP;
+    pub use crate::scancode_linux::MAP;
     #[cfg(target_os = "macos")]
-    pub use scancode_macos::MAP;
+    pub use crate::scancode_macos::MAP;
     #[cfg(target_os = "windows")]
-    pub use scancode_windows::MAP;
+    pub use crate::scancode_windows::MAP;
 }
 
 impl Scancode {
     /// Try to convert a hardware scancode from the current platform to a Scancode enum value.
-    pub fn new(hardware_scancode: u8) -> Option<Scancode> {
+    #[inline]
+    pub const fn new(hardware_scancode: u8) -> Option<Scancode> {
         if (hardware_scancode as usize) < scancode::MAP.len() {
             scancode::MAP[hardware_scancode as usize]
         } else {

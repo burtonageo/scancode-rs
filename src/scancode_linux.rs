@@ -1,8 +1,7 @@
-use Scancode;
-use Scancode::*;
+use crate::Scancode::{self, *};
 
 /// Keyboard scancode map for Linux.
-pub static MAP: [Option<Scancode>; 136] = [
+pub const MAP: [Option<Scancode>; 136] = [
     None,
     None,
     None,

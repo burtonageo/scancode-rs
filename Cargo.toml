@@ -6,6 +6,7 @@ description = "Keyboard hardware scancode converter"
 keywords = ["keyboard", "input"]
 repository = "https://github.com/rsaarelm/scancode-rs"
 license = "MIT OR Apache-2.0"
+edition = "2018"
 
 [dependencies]
 enum_primitive = "0.1"
