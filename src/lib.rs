@@ -5,7 +5,7 @@ use enum_primitive_derive::Primitive;
 
 /// Default values for hardware keyboard keys.
 ///
-/// After USB HID Usage Tables document at http://www.usb.org/developers/hidpage/Hut1_12v2.pdf
+/// Taken from the USB HID Usage Tables document at https://usb.org/sites/default/files/hut1_22.pdf.
 ///
 /// You can use the `FromPrimitive` trait to convert from an USB HID integer into a `Scancode` enum
 /// value.
