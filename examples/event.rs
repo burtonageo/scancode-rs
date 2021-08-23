@@ -1,8 +1,8 @@
 extern crate glutin;
 extern crate scancode;
 
-use std::collections::BTreeMap;
 use scancode::Scancode;
+use std::collections::BTreeMap;
 
 fn main() {
     let mut errors = BTreeMap::new();

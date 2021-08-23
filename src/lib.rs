@@ -124,18 +124,18 @@ pub enum Scancode {
 }
 }
 
-#[cfg(target_os = "macos")]
-mod scancode_macos;
 #[cfg(target_os = "linux")]
 mod scancode_linux;
+#[cfg(target_os = "macos")]
+mod scancode_macos;
 #[cfg(target_os = "windows")]
 mod scancode_windows;
 
 mod scancode {
-    #[cfg(target_os = "macos")]
-    pub use scancode_macos::MAP;
     #[cfg(target_os = "linux")]
     pub use scancode_linux::MAP;
+    #[cfg(target_os = "macos")]
+    pub use scancode_macos::MAP;
     #[cfg(target_os = "windows")]
     pub use scancode_windows::MAP;
 }

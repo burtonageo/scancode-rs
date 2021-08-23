@@ -1,5 +1,5 @@
-extern crate scancode;
 extern crate num;
+extern crate scancode;
 
 use num::FromPrimitive;
 use scancode::Scancode;
