@@ -160,6 +160,7 @@ mod scancode {
         } else if #[cfg(windows)] {
             pub use crate::scancode_windows::MAP;
         } else {
+            // Fallback empty scancode map.
             pub const MAP: [Option<crate::Scancode>; 0] = [];
         }
     }
