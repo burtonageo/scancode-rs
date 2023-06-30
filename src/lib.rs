@@ -1,5 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use cfg_if::cfg_if;
 #[cfg(feature = "num-from-primitive")]
 use enum_primitive_derive::Primitive;
 
@@ -139,24 +140,29 @@ pub enum Scancode {
     RightGui = 231,
 }
 
-#[cfg(all(unix, not(target_vendor = "apple")))]
-mod scancode_linux;
-#[cfg(target_os = "macos")]
-mod scancode_macos;
-#[cfg(windows)]
-mod scancode_windows;
+cfg_if! {
+    if #[cfg(all(unix, not(target_vendor = "apple")))] {
+        mod scancode_linux;
+    } else if #[cfg(target_os = "macos")] {
+        mod scancode_macos;
+    } else if #[cfg(windows)] {
+        mod scancode_windows;
+    }
+}
 
 mod scancode {
-    #[cfg(all(unix, not(target_vendor = "apple")))]
-    pub use crate::scancode_linux::MAP;
-    #[cfg(target_os = "macos")]
-    pub use crate::scancode_macos::MAP;
-    #[cfg(windows)]
-    pub use crate::scancode_windows::MAP;
-
-    // Fallback empty scancode map.
-    #[cfg(not(any(unix, windows, target_os = "macos")))]
-    pub const MAP: [Option<crate::Scancode>; 0] = [];
+    use cfg_if::cfg_if;
+    cfg_if! {
+        if #[cfg(all(unix, not(target_vendor = "apple")))] {
+            pub use crate::scancode_linux::MAP;
+        } else if #[cfg(target_os = "macos")] {
+            pub use crate::scancode_macos::MAP;
+        } else if #[cfg(windows)] {
+            pub use crate::scancode_windows::MAP;
+        } else {
+            pub const MAP: [Option<crate::Scancode>; 0] = [];
+        }
+    }
 }
 
 impl Scancode {

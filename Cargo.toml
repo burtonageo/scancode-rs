@@ -11,6 +11,9 @@ repository = "https://github.com/burtonageo/scancode-rs"
 license = "MIT OR Apache-2.0"
 edition = "2018"
 
+[dependencies]
+cfg-if = "1"
+
 [dependencies.enum-primitive-derive]
 version = "0.2"
 optional = true
